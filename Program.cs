@@ -1,5 +1,4 @@
-﻿// Feature branch: code changes for demonstration (work item #12345)
-using Microsoft.SemanticKernel;
+﻿using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using ModelContextProtocol.Client;
@@ -15,9 +14,9 @@ class Program
         var builder = Kernel.CreateBuilder();
 
         builder.AddAzureOpenAIChatCompletion(
-            deploymentName: "my-deployment",
-            endpoint: "my azure-openai-endpoint",
-            apiKey: "my-azure-openai-api-key",
+            deploymentName: "dep name",
+            endpoint: "end point",
+            apiKey: "api key here",
             serviceId: "azure-openai"
         );
 
@@ -45,26 +44,26 @@ class Program
         //Console.WriteLine($"Model response:\n{responses.Select(a => a.Content)}");
 
         foreach (var response in responses)
-
         {
-            // --- Begin user input handling for repository search ---
-            Console.Write("Enter GitHub repository search term: ");
-            string userQuery = Console.ReadLine() ?? string.Empty; // null check for safety
-            var result = await kernel.InvokeAsync("GitHub", "search_repositories", new()
             {
-                // ["query"] = "kernel"
-                ["query"] = userQuery
-            });
+                
+                Console.Write("Enter GitHub repository search term: ");
+                string userQuery = Console.ReadLine();
+                var result = await kernel.InvokeAsync("GitHub", "search_repositories", new()
+                {
+                   //["query"] = "kernel"
+                    ["query"] = userQuery
+                });
 
-            messages.AddUserMessage($"Here are the issues: {result}");
-            var finalMessages = await chat.GetChatMessageContentsAsync(messages, new AzureOpenAIPromptExecutionSettings());
-            //Console.WriteLine($"\nFinal response:\n{final.Content}");
+                messages.AddUserMessage($"Here are the issues: {result}");
+                var finalMessages = await chat.GetChatMessageContentsAsync(messages, new AzureOpenAIPromptExecutionSettings());
+                //Console.WriteLine($"\nFinal response:\n{final.Content}");
 
-            foreach (var message in finalMessages)
-            {
-                Console.WriteLine($"\nFinal response:\n{message.Content}");
+                foreach (var message in finalMessages)
+                {
+                    Console.WriteLine($"\nFinal response:\n{message.Content}");
+                }
             }
-            // --- End user input handling ---
         }
 
         Console.ReadLine();
