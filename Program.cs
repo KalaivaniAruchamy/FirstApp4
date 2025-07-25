@@ -14,9 +14,9 @@ class Program
         var builder = Kernel.CreateBuilder();
 
         builder.AddAzureOpenAIChatCompletion(
-            deploymentName: "My Azure OpenAI Deployment",
-            endpoint: "My Azure OpenAI Endpoint",
-            apiKey: "My Azure OpenAI API Key",
+            deploymentName: "dep name",
+            endpoint: "end point",
+            apiKey: "api key here",
             serviceId: "azure-openai"
         );
 
