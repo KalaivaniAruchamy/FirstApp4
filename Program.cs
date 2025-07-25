@@ -45,26 +45,26 @@ class Program
         //Console.WriteLine($"Model response:\n{responses.Select(a => a.Content)}");
 
         foreach (var response in responses)
+
         {
+            // --- Begin user input handling for repository search ---
+            Console.Write("Enter GitHub repository search term: ");
+            string userQuery = Console.ReadLine() ?? string.Empty; // null check for safety
+            var result = await kernel.InvokeAsync("GitHub", "search_repositories", new()
             {
-                
-                Console.Write("Enter GitHub repository search term: ");
-                string userQuery = Console.ReadLine() ?? string.Empty; // null check for safety
-                var result = await kernel.InvokeAsync("GitHub", "search_repositories", new()
-                {
-                   //["query"] = "kernel"
-                    ["query"] = userQuery
-                });
+                // ["query"] = "kernel"
+                ["query"] = userQuery
+            });
 
-                messages.AddUserMessage($"Here are the issues: {result}");
-                var finalMessages = await chat.GetChatMessageContentsAsync(messages, new AzureOpenAIPromptExecutionSettings());
-                //Console.WriteLine($"\nFinal response:\n{final.Content}");
+            messages.AddUserMessage($"Here are the issues: {result}");
+            var finalMessages = await chat.GetChatMessageContentsAsync(messages, new AzureOpenAIPromptExecutionSettings());
+            //Console.WriteLine($"\nFinal response:\n{final.Content}");
 
-                foreach (var message in finalMessages)
-                {
-                    Console.WriteLine($"\nFinal response:\n{message.Content}");
-                }
+            foreach (var message in finalMessages)
+            {
+                Console.WriteLine($"\nFinal response:\n{message.Content}");
             }
+            // --- End user input handling ---
         }
 
         Console.ReadLine();
